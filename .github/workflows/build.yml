@@ -5,26 +5,26 @@ jobs:
     runs-on: ubuntu-22.04
     steps:
       - uses: actions/checkout@v4
+
       - name: Install dependencies
         run: |
           sudo apt update
           sudo apt install -y python3-pip build-essential git \
           openjdk-17-jdk unzip zlib1g-dev libncurses5-dev libffi-dev
           pip3 install buildozer cython
-      - name: Pre-install Android SDK and accept licenses
-        env:
-          JAVA_HOME: /usr/lib/jvm/temurin-17-jdk-amd64
+
+      - name: Pre-accept Android SDK licenses
         run: |
-          mkdir -p $HOME/.buildozer/android/platform/android-sdk/cmdline-tools
-          cd $HOME/.buildozer/android/platform/android-sdk/cmdline-tools
-          wget -q https://dl.google.com/android/repository/commandlinetools-linux-11076708_latest.zip -O tools.zip
-          unzip -q tools.zip
-          mv cmdline-tools latest
-          yes | $HOME/.buildozer/android/platform/android-sdk/cmdline-tools/latest/bin/sdkmanager --sdk_root=$HOME/.buildozer/android/platform/android-sdk --licenses
+          mkdir -p $HOME/.buildozer/android/platform/android-sdk/licenses
+          cd $HOME/.buildozer/android/platform/android-sdk/licenses
+          printf "\n8933bad161af4178b1185d1a37fbf41ea5269c55\nd56f5187479451eabf01fb78af6dfcb131a6481e\n24333f8a63b6825ea9c5514f83c2829b004d1fee\n" > android-sdk-license
+          printf "\n84831b9409646a918e30573bab4c9c91346d8abd\n" > android-sdk-preview-license
+
       - name: Build APK
         env:
           JAVA_HOME: /usr/lib/jvm/temurin-17-jdk-amd64
         run: buildozer -v android debug
+
       - uses: actions/upload-artifact@v4
         with:
           name: apk
