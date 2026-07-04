@@ -12,6 +12,8 @@ jobs:
           openjdk-17-jdk unzip zlib1g-dev libncurses5-dev libffi-dev
           pip3 install buildozer cython
       - name: Pre-install Android SDK and accept licenses
+        env:
+          JAVA_HOME: /usr/lib/jvm/temurin-17-jdk-amd64
         run: |
           mkdir -p $HOME/.buildozer/android/platform/android-sdk/cmdline-tools
           cd $HOME/.buildozer/android/platform/android-sdk/cmdline-tools
@@ -20,6 +22,8 @@ jobs:
           mv cmdline-tools latest
           yes | $HOME/.buildozer/android/platform/android-sdk/cmdline-tools/latest/bin/sdkmanager --sdk_root=$HOME/.buildozer/android/platform/android-sdk --licenses
       - name: Build APK
+        env:
+          JAVA_HOME: /usr/lib/jvm/temurin-17-jdk-amd64
         run: buildozer -v android debug
       - uses: actions/upload-artifact@v4
         with:
