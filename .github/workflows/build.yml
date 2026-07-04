@@ -3,22 +3,12 @@ on: [push]
 jobs:
   build:
     runs-on: ubuntu-22.04
+    container:
+      image: kivy/buildozer
     steps:
       - uses: actions/checkout@v4
-
-      - name: Install dependencies
-        run: |
-          sudo apt update
-          sudo apt install -y python3-pip build-essential git \
-          openjdk-17-jdk unzip zlib1g-dev libncurses5-dev libffi-dev
-          pip3 install buildozer cython
-
       - name: Build APK
-        env:
-          JAVA_HOME: /usr/lib/jvm/temurin-17-jdk-amd64
-        run: |
-          yes | script -qec "buildozer -v android debug" /dev/null
-
+        run: buildozer -v android debug
       - uses: actions/upload-artifact@v4
         with:
           name: apk
