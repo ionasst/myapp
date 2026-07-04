@@ -11,6 +11,9 @@ jobs:
           sudo apt install -y python3-pip build-essential git \
           openjdk-17-jdk unzip zlib1g-dev libncurses5-dev libffi-dev
           pip3 install buildozer cython
+      - name: Accept Android SDK licenses
+        run: |
+          yes | buildozer android debug || true
       - name: Build APK
         run: buildozer -v android debug
       - uses: actions/upload-artifact@v4
