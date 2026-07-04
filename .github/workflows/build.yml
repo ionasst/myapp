@@ -11,9 +11,14 @@ jobs:
           sudo apt install -y python3-pip build-essential git \
           openjdk-17-jdk unzip zlib1g-dev libncurses5-dev libffi-dev
           pip3 install buildozer cython
-      - name: Accept Android SDK licenses
+      - name: Pre-install Android SDK and accept licenses
         run: |
-          yes | buildozer android debug || true
+          mkdir -p $HOME/.buildozer/android/platform/android-sdk/cmdline-tools
+          cd $HOME/.buildozer/android/platform/android-sdk/cmdline-tools
+          wget -q https://dl.google.com/android/repository/commandlinetools-linux-11076708_latest.zip -O tools.zip
+          unzip -q tools.zip
+          mv cmdline-tools latest
+          yes | $HOME/.buildozer/android/platform/android-sdk/cmdline-tools/latest/bin/sdkmanager --sdk_root=$HOME/.buildozer/android/platform/android-sdk --licenses
       - name: Build APK
         run: buildozer -v android debug
       - uses: actions/upload-artifact@v4
