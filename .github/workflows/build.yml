@@ -8,7 +8,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Build APK
-        run: buildozer -v android debug
+        run: yes | buildozer -v android debug
       - uses: actions/upload-artifact@v4
         with:
           name: apk
